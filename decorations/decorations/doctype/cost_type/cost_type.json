@@ -1,0 +1,61 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:cost_type",
+ "creation": "2026-10-03 14:54:31.230769",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "cost_type",
+  "account",
+  "sales_item"
+ ],
+ "fields": [
+  {
+   "fieldname": "cost_type",
+   "fieldtype": "Data",
+   "label": "Cost Type",
+   "unique": 1
+  },
+  {
+   "fieldname": "account",
+   "fieldtype": "Link",
+   "label": "Account",
+   "options": "Account"
+  },
+  {
+   "fieldname": "sales_item",
+   "fieldtype": "Link",
+   "label": "Sales Item",
+   "options": "Item"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-10-03 15:08:33.181014",
+ "modified_by": "Administrator",
+ "module": "Decorations",
+ "name": "Cost Type",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
