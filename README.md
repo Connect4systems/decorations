@@ -2,6 +2,23 @@
 
 App for small decoration company
 
+### Project costs
+
+Set a Company on each Project, an Account on each Cost Type, and a default
+account for that company in each Mode of Payment. Amounts use the company currency.
+Users posting costs need permission to create and submit Journal Entries and create Files.
+
+Save a Cost as a draft, then submit it to automatically create a submitted Journal
+Entry. The entry debits the Cost Type account and credits the Mode of Payment
+account, with the project on both rows and the company's default cost center.
+The Cost reference and note appear in the journal remarks; attachments are linked
+to the journal with their privacy preserved. A confirmation includes the journal
+link, which is also saved on the Cost. Cancelling the Cost cancels its journal;
+the user must have Journal Entry cancellation permission.
+
+After updating the app, run `bench --site <site> migrate` to apply the Cost fields.
+Run controller tests with `bench --site <site> run-tests --app decorations --doctype Cost`.
+
 ### Installation
 
 You can install this app using the [bench](https://github.com/frappe/bench) CLI:
