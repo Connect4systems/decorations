@@ -1,8 +1,11 @@
 import frappe
 from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
 
+from decorations.permissions import setup_manager_role
+
 
 def after_migrate():
+	setup_manager_role()
 	create_custom_fields(
 		{
 			"Sales Invoice": [

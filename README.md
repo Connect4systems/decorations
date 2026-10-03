@@ -46,6 +46,22 @@ Run `bench --site <site> migrate` after updating. Users need Sales Invoice creat
 submit, and cancel permissions in addition to the Cost/Journal Entry permissions.
 Run all app tests with `bench --site <site> run-tests --app decorations`.
 
+### Manager role
+
+Installation and `bench --site <site> migrate` create/update the **Manager** role.
+Assign it to a System User in the User form to manage Costs, Cost Types, Clearnces,
+Decoration Settings, Projects, Items, Customers, and attachments. It also grants
+create, submit, cancel, amend, and delete permissions for Sales Invoices, Journal
+Entries, and Payment Entries, allowing the full cost, billing, and payment cycle.
+Submit, cancel, and amend apply only to submittable documents.
+
+Accounts, Mode of Payment, GL Entries, and supporting accounting masters are
+read-only for this role. Manager can open the General Ledger report. Existing
+permissions for other roles are preserved; other roles assigned to a user can
+grant additional access. User Permissions and ERPNext's normal document and
+linked-record checks still apply. Cancel submitted documents before deleting;
+cancel the linked Clearnce before cancelling an invoiced Cost.
+
 ### Installation
 
 You can install this app using the [bench](https://github.com/frappe/bench) CLI:
