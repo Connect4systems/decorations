@@ -1,0 +1,35 @@
+{
+ "doctype": "DocType",
+ "name": "Decoration Settings",
+ "module": "Decorations",
+ "engine": "InnoDB",
+ "field_order": [
+  "supervision"
+ ],
+ "fields": [
+  {
+   "fieldname": "supervision",
+   "fieldtype": "Link",
+   "label": "Supervision",
+   "options": "Item",
+   "reqd": 1,
+   "description": "Sales item used for the project supervision fee."
+  }
+ ],
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "issingle": 1
+}

@@ -13,6 +13,9 @@
   "mode_of_payment",
   "attachment",
   "journal_entry",
+  "status",
+  "clearnce",
+  "sales_invoice",
   "section_break_7k4u",
   "amended_from"
  ],
@@ -80,6 +83,32 @@
    "fieldtype": "Link",
    "label": "Journal Entry",
    "options": "Journal Entry",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Pending\nUnpaid\nPartly Paid\nPaid\nOverdue",
+   "read_only": 1,
+   "no_copy": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "clearnce",
+   "fieldtype": "Link",
+   "label": "Clearnce",
+   "options": "Clearnce",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "sales_invoice",
+   "fieldtype": "Link",
+   "label": "Sales Invoice",
+   "options": "Sales Invoice",
    "read_only": 1,
    "no_copy": 1
   }

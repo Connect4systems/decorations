@@ -11,11 +11,18 @@ from decorations.decorations.doctype.cost.cost import Cost
 
 class TestCost(FrappeTestCase):
 	def make_cost(self):
-		return frappe.get_doc({
-			"doctype": "Cost", "name": "COST-TEST", "date": "2026-10-03",
-			"project": "Project Test", "cost_type": "Materials", "amount": 125,
-			"mode_of_payment": "Cash", "note": "Paint for project",
-		})
+		return frappe.get_doc(
+			{
+				"doctype": "Cost",
+				"name": "COST-TEST",
+				"date": "2026-10-03",
+				"project": "Project Test",
+				"cost_type": "Materials",
+				"amount": 125,
+				"mode_of_payment": "Cash",
+				"note": "Paint for project",
+			}
+		)
 
 	def test_submit_posts_balanced_project_entry(self):
 		cost = self.make_cost()
@@ -49,7 +56,8 @@ class TestCost(FrappeTestCase):
 		journal.insert.assert_called_once_with()
 		journal.submit.assert_called_once_with()
 		attachments.assert_called_once_with("JE-TEST")
-		db_set.assert_called_once_with("journal_entry", "JE-TEST")
+		db_set.assert_any_call("journal_entry", "JE-TEST")
+		db_set.assert_any_call("status", "Pending")
 		self.assertIn("JE-TEST", message.call_args.args[0])
 
 	def test_missing_payment_account_blocks_posting(self):

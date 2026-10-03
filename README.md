@@ -19,6 +19,33 @@ the user must have Journal Entry cancellation permission.
 After updating the app, run `bench --site <site> migrate` to apply the Cost fields.
 Run controller tests with `bench --site <site> run-tests --app decorations --doctype Cost`.
 
+### Clearances and customer billing
+
+In Decoration Settings, select the Supervision sales item. On Project, set the
+Customer, Company, and Supervision percentage. Each Cost Type needs a Sales Item
+with the usual ERPNext sales accounting defaults.
+
+Submitted Costs start as Pending. Create a Clearnce, select its Project, and click
+Fetch Cost to load the project's pending submitted costs. The table includes the
+original Cost, Cost Type, Note, Amount, and Attachment. Supervision is calculated
+as Total Cost multiplied by the Project's percentage; Total Amount includes both.
+Amounts use the project company's currency.
+
+Submitting Clearnce creates and submits a linked Sales Invoice with one line per
+Cost using its Cost Type's Sales Item, plus the Supervision item when the fee is
+nonzero. Standard ERPNext invoice taxes and rounding still apply. Costs cannot be
+included in another clearance while linked to an active invoice.
+
+Cost statuses follow the invoice: Unpaid, Partly Paid, Paid, or Overdue. Payment
+Entry and Journal Entry submissions/cancellations refresh status immediately.
+An hourly scheduled check covers due dates and reconciliation changes; keep the
+bench scheduler enabled. Cancel the Clearnce before cancelling an invoiced Cost.
+Cancelling its invoice releases the costs back to Pending.
+
+Run `bench --site <site> migrate` after updating. Users need Sales Invoice create,
+submit, and cancel permissions in addition to the Cost/Journal Entry permissions.
+Run all app tests with `bench --site <site> run-tests --app decorations`.
+
 ### Installation
 
 You can install this app using the [bench](https://github.com/frappe/bench) CLI:

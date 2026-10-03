@@ -28,9 +28,11 @@ class Cost(Document):
 			"default_account",
 		)
 		if not credit_account:
-			frappe.throw(_("Please set a payment account for {0} in Mode of Payment {1}.").format(
-				company, self.mode_of_payment
-			))
+			frappe.throw(
+				_("Please set a payment account for {0} in Mode of Payment {1}.").format(
+					company, self.mode_of_payment
+				)
+			)
 		if debit_account == credit_account:
 			frappe.throw(_("Cost and payment accounts must be different."))
 
@@ -40,39 +42,57 @@ class Cost(Document):
 				"Account", account_name, ["company", "is_group", "disabled", "account_currency"], as_dict=True
 			)
 			if account.company != company or account.is_group or account.disabled:
-				frappe.throw(_("Account {0} must be an enabled ledger account in {1}.").format(account_name, company))
+				frappe.throw(
+					_("Account {0} must be an enabled ledger account in {1}.").format(account_name, company)
+				)
 			if account.account_currency and account.account_currency != currency:
-				frappe.throw(_("Account {0} must use the company currency {1}.").format(account_name, currency))
+				frappe.throw(
+					_("Account {0} must use the company currency {1}.").format(account_name, currency)
+				)
 
 		amount = flt(self.amount, self.precision("amount"))
 		cost_center = frappe.get_cached_value("Company", company, "cost_center")
-		journal_entry = frappe.get_doc({
-			"doctype": "Journal Entry",
-			"voucher_type": "Journal Entry",
-			"company": company,
-			"posting_date": self.date,
-			"mode_of_payment": self.mode_of_payment,
-			"user_remark": "\n".join(filter(None, [_("Cost: {0}").format(self.name), self.note])),
-			"accounts": [
-				{"account": debit_account, "debit_in_account_currency": amount,
-				 "project": self.project, "cost_center": cost_center},
-				{"account": credit_account, "credit_in_account_currency": amount,
-				 "project": self.project, "cost_center": cost_center},
-			],
-		})
+		journal_entry = frappe.get_doc(
+			{
+				"doctype": "Journal Entry",
+				"voucher_type": "Journal Entry",
+				"company": company,
+				"posting_date": self.date,
+				"mode_of_payment": self.mode_of_payment,
+				"user_remark": "\n".join(filter(None, [_("Cost: {0}").format(self.name), self.note])),
+				"accounts": [
+					{
+						"account": debit_account,
+						"debit_in_account_currency": amount,
+						"project": self.project,
+						"cost_center": cost_center,
+					},
+					{
+						"account": credit_account,
+						"credit_in_account_currency": amount,
+						"project": self.project,
+						"cost_center": cost_center,
+					},
+				],
+			}
+		)
 		journal_entry.insert()
 		self.copy_attachments(journal_entry.name)
 		journal_entry.submit()
 		self.db_set("journal_entry", journal_entry.name)
+		self.db_set("status", "Pending")
 		frappe.msgprint(
 			_("Cost created submitted Journal Entry {0}.").format(
 				get_link_to_form("Journal Entry", journal_entry.name)
-			), alert=True, indicator="green",
+			),
+			alert=True,
+			indicator="green",
 		)
 
 	def copy_attachments(self, journal_entry):
 		files = frappe.get_all(
-			"File", filters={"attached_to_doctype": "Cost", "attached_to_name": self.name},
+			"File",
+			filters={"attached_to_doctype": "Cost", "attached_to_name": self.name},
 			fields=["file_name", "file_url", "is_private"],
 		)
 		if self.attachment and not any(file.file_url == self.attachment for file in files):
@@ -83,11 +103,20 @@ class Cost(Document):
 				frappe.throw(_("Please upload the Cost attachment before submitting."))
 			files.append(file)
 		for file in files:
-			frappe.get_doc({
-				"doctype": "File", "file_name": file.file_name, "file_url": file.file_url,
-				"is_private": file.is_private, "attached_to_doctype": "Journal Entry",
-				"attached_to_name": journal_entry,
-			}).insert()
+			frappe.get_doc(
+				{
+					"doctype": "File",
+					"file_name": file.file_name,
+					"file_url": file.file_url,
+					"is_private": file.is_private,
+					"attached_to_doctype": "Journal Entry",
+					"attached_to_name": journal_entry,
+				}
+			).insert()
+
+	def before_cancel(self):
+		if self.sales_invoice or self.clearnce:
+			frappe.throw(_("Cancel the linked Clearnce before cancelling this Cost."))
 
 	def on_cancel(self):
 		if self.journal_entry:

@@ -5,6 +5,29 @@ app_description = "App for small decoration company"
 app_email = "connect4systems@gmail.com"
 app_license = "mit"
 
+required_apps = ["erpnext"]
+
+after_migrate = "decorations.setup.after_migrate"
+after_install = "decorations.setup.after_migrate"
+
+doc_events = {
+	"Sales Invoice": {
+		"on_submit": "decorations.billing.invoice_updated",
+		"on_update_after_submit": "decorations.billing.invoice_updated",
+		"on_cancel": "decorations.billing.invoice_updated",
+	},
+	"Payment Entry": {
+		"on_submit": "decorations.billing.payment_updated",
+		"on_cancel": "decorations.billing.payment_updated",
+	},
+	"Journal Entry": {
+		"on_submit": "decorations.billing.payment_updated",
+		"on_cancel": "decorations.billing.payment_updated",
+	},
+}
+
+scheduler_events = {"hourly": ["decorations.billing.sync_cost_statuses"]}
+
 # Apps
 # ------------------
 
@@ -252,4 +275,3 @@ app_license = "mit"
 # ------------
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
-

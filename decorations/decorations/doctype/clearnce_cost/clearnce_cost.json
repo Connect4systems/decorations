@@ -1,0 +1,58 @@
+{
+ "doctype": "DocType",
+ "name": "Clearnce Cost",
+ "module": "Decorations",
+ "engine": "InnoDB",
+ "field_order": [
+  "cost",
+  "cost_type",
+  "note",
+  "amount",
+  "attachment"
+ ],
+ "fields": [
+  {
+   "fieldname": "cost",
+   "fieldtype": "Link",
+   "label": "Cost",
+   "options": "Cost",
+   "reqd": 1,
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "cost_type",
+   "fieldtype": "Link",
+   "label": "Cost Type",
+   "options": "Cost Type",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "note",
+   "fieldtype": "Small Text",
+   "label": "Note",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "label": "Amount",
+   "read_only": 1,
+   "in_list_view": 1,
+   "options": "parent.currency"
+  },
+  {
+   "fieldname": "attachment",
+   "fieldtype": "Attach",
+   "label": "Attachment",
+   "read_only": 1,
+   "in_list_view": 1
+  }
+ ],
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "istable": 1
+}
